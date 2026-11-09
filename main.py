@@ -1,3 +1,4 @@
+from knowledge import search_knowledge
 from database import get_connection
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
@@ -144,3 +145,13 @@ def delete_order(order_id: int):
             detail="Order not found"
         )
 
+
+@app.get("/knowledge/search")
+def search_knowledge_endpoint(keyword: str):
+    results = search_knowledge(keyword)
+
+    return {
+        "keyword": keyword,
+        "results": results,
+        "count": len(results)
+    }

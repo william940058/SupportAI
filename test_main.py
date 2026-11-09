@@ -138,4 +138,35 @@ def test_create_order_with_mock():
 
     fake_cursor.execute.assert_called_once()
 
+def test_search_knowledge():
+    response = client.get(
+        "knowledge/search",
+        params={"keyword": "refund"}
+    )
+    
+    assert response.status_code == 200
 
+    data = response.json()
+
+    assert data["keyword"] == "refund"
+    assert data["count"] == 3
+    assert len(data["results"]) == 3
+
+def test_search_knowledge_no_results():
+    response = client.get(
+        "knowledge/search",
+        params={"keyword": "warranty"}
+    )
+    
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert data["keyword"] == "warranty"
+    assert data["count"] == 0
+    assert data["results"] == []
+
+def test_search_knowledge_missing_keyword():
+    response = client.get("knowledge/search")
+    
+    assert response.status_code == 422
