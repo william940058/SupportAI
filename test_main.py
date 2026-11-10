@@ -170,3 +170,34 @@ def test_search_knowledge_missing_keyword():
     response = client.get("knowledge/search")
     
     assert response.status_code == 422
+
+##
+def test_semantic_knowledge():
+    response = client.get(
+        "knowledge/semantic-search",
+        params={"query": "How long does it take to receive my refund?"}
+    )
+    
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert data["question"] == "How long does it take to receive my refund?"
+    assert "5-7 business days" in data["best_match"]
+    assert isinstance(data["similarity"], float)
+
+def test_semantic_search_with_mock():
+    fake_result = {
+        "question": "refund",
+        "best_match": "Refunds take 5-7 business days.",
+        "similarity": 0.95
+    }
+
+    with patch("main.semantic_search", return_value=fake_result):
+        response = client.get(
+            "/knowledge/semantic-search",
+            params={"query": "refund"}
+        )
+
+    assert response.status_code == 200
+    assert response.json() == fake_result

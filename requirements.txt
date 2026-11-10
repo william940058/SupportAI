@@ -22,3 +22,8 @@ starlette==1.10.0
 typing-inspection==0.4.4
 typing_extensions==4.16.0
 uvicorn==0.54.0
+sentence-transformers==3.0.1
+transformers==4.41.2
+torch==2.2.2
+numpy==1.26.4
+scipy==1.13.1

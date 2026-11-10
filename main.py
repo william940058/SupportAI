@@ -1,3 +1,4 @@
+from embedding import semantic_search
 from knowledge import search_knowledge
 from database import get_connection
 from fastapi import FastAPI, HTTPException
@@ -155,3 +156,9 @@ def search_knowledge_endpoint(keyword: str):
         "results": results,
         "count": len(results)
     }
+
+@app.get("/knowledge/semantic-search")
+def search_knowledge_semantically(query:str):
+    result = semantic_search(query)
+    return result
+
